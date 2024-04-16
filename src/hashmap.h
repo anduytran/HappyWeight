@@ -6,39 +6,21 @@
 
 #endif //HAPPYWEIGHT_HASHMAP_H
 
-#include <vector>
-#include <bits/stdc++.h>
+#include "food.h"
 using namespace std;
 
-bool sortbysecond(const pair<string, float> &a, const pair<string, float> &b)
+bool sortbysecondlt(const pair<string, float> &a, const pair<string, float> &b)
 {
     return (a.second < b.second);
 }
+bool sortbysecondgt(const pair<string, float> &a, const pair<string, float> &b)
+{
+    return (a.second > b.second);
+}
 
-class HashNode{
-    string key;
-    pair<string, vector<float>> value;
-public:
-    HashNode(string k = "", pair<string, vector<float>> v = {"NULL", {}}){
-        key = k;
-        value = v;
-    }
-    string getKey(){
-        return key;
-    }
-    pair<string, vector<float>> getValue(){
-        return value;
-    }
-
-    HashNode* operator=(HashNode* ptr){
-        this->key = ptr->key;
-        this->value = ptr->value;
-        return this;
-    }
-};
 
 class HashMap{
-    vector<HashNode*> map;
+    vector<Food*> map;
     int current_size = 0;
     int max_size;
     float lf = .7;
@@ -47,12 +29,12 @@ public:
     hash<string> hash;
     HashMap(){
         max_size = 100;
-        vector<HashNode*> v(max_size);
+        vector<Food*> v(max_size);
         this->map = v;
     }
     ~HashMap(){
         for(int i = 0; i < map.size(); i++){
-            HashNode* ptr = map[i];
+            Food* ptr = map[i];
             delete ptr;
             map[i] = nullptr;
         }
@@ -63,7 +45,7 @@ public:
     int getCurrentSize(){
         return current_size;
     }
-    HashNode*& operator[](string name){
+    Food*& operator[](string name){
         current_size += 1;
         int index = hash(name) % (max_size - 1);
         if(!map[index]){
@@ -85,7 +67,7 @@ public:
                 max_size = 20300;
             }
             index = hash(name) % (max_size - 1);
-            vector<HashNode*> temp(max_size);
+            vector<Food*> temp(max_size);
             for(int i = 0; i < map.size(); i++){
                 if(map[i] != nullptr){
                     temp[index] = map[i];
@@ -95,7 +77,7 @@ public:
         }
         return map[index];
     }
-    HashNode* operator[](string name) const{
+    Food* operator[](string name) const{
         return map[hash(name) % (max_size - 1)];
     }
     void tenLowestCalorie(const string& category) {
@@ -104,17 +86,18 @@ public:
             if (map[i] != nullptr) {
                 if (map[i]->getValue().first == category) {
                     float norm_cal = map[i]->getValue().second[1] * (map[i]->getValue().second[14] / 100);
+                    norm_cal = map[i]->getValue().second[1];
                     if(norm_cal < 0){
                         continue;
                     }
                     if (temp.size() < 10) {
                         temp.emplace_back(map[i]->getKey(), norm_cal);
                         if (temp.size() == 10) {
-                            sort(temp.begin(), temp.end(), sortbysecond);
+                            sort(temp.begin(), temp.end(), sortbysecondlt);
                         }
                     } else {
                         if (norm_cal < temp.back().second && norm_cal > 0) {
-                            sort(temp.begin(), temp.end(), sortbysecond);
+                            sort(temp.begin(), temp.end(), sortbysecondlt);
                             temp.pop_back();
                             temp.emplace_back(map[i]->getKey(), norm_cal);
                         }
@@ -122,8 +105,39 @@ public:
                 }
             }
         }
-        sort(temp.begin(), temp.end(), sortbysecond);
+        sort(temp.begin(), temp.end(), sortbysecondlt);
         cout << "The 10 foods with the lowest calorie values are: " << endl;
+        for (int i = 0; i < temp.size(); i++) {
+            cout << i + 1 << ". " << temp[i].first << ": " << temp[i].second << endl;
+        }
+    }
+    void tenHighestCalorie(const string& category) {
+        vector<pair<string, float>> temp;
+        for (int i = 0; i < getSize(); i++) {
+            if (map[i] != nullptr) {
+                if (map[i]->getValue().first == category) {
+                    float norm_cal = map[i]->getValue().second[1] * (map[i]->getValue().second[14] / 100);
+                    norm_cal = map[i]->getValue().second[1];
+                    if(norm_cal < 0){
+                        continue;
+                    }
+                    if (temp.size() < 10) {
+                        temp.emplace_back(map[i]->getKey(), norm_cal);
+                        if (temp.size() == 10) {
+                            sort(temp.begin(), temp.end(), sortbysecondgt);
+                        }
+                    } else {
+                        if (norm_cal > temp.back().second && norm_cal > 0) {
+                            sort(temp.begin(), temp.end(), sortbysecondgt);
+                            temp.pop_back();
+                            temp.emplace_back(map[i]->getKey(), norm_cal);
+                        }
+                    }
+                }
+            }
+        }
+        sort(temp.begin(), temp.end(), sortbysecondgt);
+        cout << "The 10 foods with the highest calorie values are: " << endl;
         for (int i = 0; i < temp.size(); i++) {
             cout << i + 1 << ". " << temp[i].first << ": " << temp[i].second << endl;
         }
