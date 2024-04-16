@@ -1,8 +1,9 @@
+#include "hashmap.h"
 //
 // Created by Dylan on 4/9/2024.
 //
 #include <iostream>
-#include "hashmap.h"
+#include <unordered_map>
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -88,7 +89,7 @@ void load(HashMap &hashmap){
         getline(s, word, ',');
         float twohundredcal_weight = stof(word);
         vector<float> v = {calories, protein, carbohydrates, sugars, fiber, cholesterol, saturated_fats, trans_fats, soluble_fiber, insoluble_fiber, monounsaturated_fats, polyunsaturated_fats, caffeine, sw, sw2, sw3, sw4, sw5, sw6, sw7, sw8, sw9, twohundredcal_weight};
-        HashNode* ptr = new HashNode(name, make_pair(food_group, v));
+        Food* ptr = new Food(name, make_pair(food_group, v));
         hashmap[name] = ptr;
     }
 }
@@ -97,5 +98,6 @@ int main() {
     HashMap map;
     load(map);
     map.tenLowestCalorie("Meats");
+    map.tenHighestCalorie("Meats");
     return 0;
 }
