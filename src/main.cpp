@@ -90,7 +90,7 @@ void load(HashMap &hashmap, Trie &trie){
         float twohundredcal_weight = stof(word);
         vector<float> v = {calories, protein, carbohydrates, sugars, fiber, cholesterol, saturated_fats, trans_fats, soluble_fiber, insoluble_fiber, monounsaturated_fats, polyunsaturated_fats, caffeine, sw, sw2, sw3, sw4, sw5, sw6, sw7, sw8, sw9, twohundredcal_weight};
         Food* ptr = new Food(name, make_pair(food_group, v));
-        hashmap[name] = ptr;
+        hashmap.set(name, ptr);
         trie.insert(ptr);
     }
 }
@@ -99,9 +99,11 @@ int main() {
     HashMap map;
     Trie trie;
     load(map, trie);
+
     map.tenLowest("Meats", "Calories");
     map.tenHighest("Meats", "Protein");
     cout << map.get("Pork Cured Bacon Cooked Microwaved")->getKey() << ": " << map.get("Pork Cured Bacon Cooked Microwaved")->getValue().second[1] << endl;
     trie.tenHighestCalorie("Meats");
+
     return 0;
 }

@@ -29,7 +29,20 @@ public:
     Trie(){
         root = new TrieNode();
     }
+    ~Trie(){
 
+    }
+    void cleanUp(TrieNode* ptr) {
+        if (ptr == nullptr) {
+            return;
+        }
+        for (int i = 0; i < VOCAB_SIZE; i++) {
+            cleanUp(ptr->next[i]);
+            if (ptr->next[i] != nullptr) {
+                delete ptr->next[i];
+            }
+        }
+    }
     void insert(Food*& food) {
         TrieNode *curr = root;
         string name = food->getKey(); // Fruits
