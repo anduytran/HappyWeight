@@ -12,6 +12,7 @@
 #include <fstream>
 #include <cmath>
 #include <algorithm>
+
 using namespace std;
 
 class Food{
