@@ -4,8 +4,8 @@
 
 #ifndef TESTING_FOOD_H
 #define TESTING_FOOD_H
-
 #endif //TESTING_FOOD_H
+#pragma once
 #include <vector>
 #include <iostream>
 #include <sstream>
@@ -14,6 +14,17 @@
 #include <algorithm>
 
 using namespace std;
+
+bool sortbysecondlt(const pair<string, float> &a, const pair<string, float> &b)
+{
+    return (a.second < b.second);
+}
+bool sortbysecondgt(const pair<string, float> &a, const pair<string, float> &b)
+{
+    return (a.second > b.second);
+}
+
+
 
 class Food{
     float ID, calories, protein, fiber, insoluble_fiber, carbohydrates, sugars, soluble_fiber, cholesterol, saturated_fats, trans_fats, monounsaturated_fats, polyunsaturated_fats, caffeine, sw, sw2, sw3, sw4, sw5, sw6, sw7, sw8, sw9, twohundredcal_weight;

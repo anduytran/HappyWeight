@@ -1,14 +1,14 @@
 #include "hashmap.h"
+#include "trie.h"
 //
 // Created by Dylan on 4/9/2024.
 //
 #include <iostream>
 #include <unordered_map>
-#include <bits/stdc++.h>
 
 using namespace std;
 
-void load(HashMap &hashmap){
+void load(HashMap &hashmap, Trie &trie){
     fstream file;
     file.open("MyFoodData Nutrition Facts SpreadSheet Release 1.4 - SR Legacy and FNDDS.csv", ios::in | ios::app);
     string temp, line, word, code, description, nutrient_code;
@@ -91,13 +91,17 @@ void load(HashMap &hashmap){
         vector<float> v = {calories, protein, carbohydrates, sugars, fiber, cholesterol, saturated_fats, trans_fats, soluble_fiber, insoluble_fiber, monounsaturated_fats, polyunsaturated_fats, caffeine, sw, sw2, sw3, sw4, sw5, sw6, sw7, sw8, sw9, twohundredcal_weight};
         Food* ptr = new Food(name, make_pair(food_group, v));
         hashmap[name] = ptr;
+        trie.insert(ptr);
     }
 }
 
 int main() {
     HashMap map;
-    load(map);
-    map.tenLowestCalorie("Meats");
-    map.tenHighestCalorie("Meats");
+    Trie trie;
+    load(map, trie);
+    map.tenLowest("Meats", "Calories");
+    map.tenHighest("Meats", "Protein");
+    cout << map.get("Pork Cured Bacon Cooked Microwaved")->getKey() << ": " << map.get("Pork Cured Bacon Cooked Microwaved")->getValue().second[1] << endl;
+    trie.tenHighestCalorie("Meats");
     return 0;
 }
