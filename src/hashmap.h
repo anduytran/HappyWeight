@@ -23,10 +23,12 @@ public:
         this->map = v;
     }
     ~HashMap(){
-        for(auto & i : map){
-            Food* ptr = i;
-            delete ptr;
-            i = nullptr;
+        for(auto & i : map) {
+            if (i != nullptr) {
+                Food *ptr = i;
+                delete ptr;
+                i = nullptr;
+            }
         }
     }
     int getSize() const{
@@ -37,43 +39,43 @@ public:
     }
     Food* get(const string& name){
         int index = hash(name) % (max_size);
-        if(map[index]->getKey() == name){
-            return map[index];
-        }else if(map[index]->getKey() != name){
-            int power = 0;
-            while(map[index] != nullptr){
-                index += pow(2, power);
-                power++;
-                if(index >= max_size){
-                    index = index % max_size;
+        if(map[index] != nullptr) {
+            if (map[index]->getKey() == name) {
+                return map[index];
+            } else if (map[index]->getKey() != name) {
+                int power = 0;
+                while (map[index] != nullptr) {
+                    index += pow(2, power);
+                    power++;
+                    if (index >= max_size) {
+                        index = index % max_size;
+                    }
                 }
+                return map[index];
             }
-            return map[index];
         }
         else{
             return nullptr;
         }
     }
-    Food*& operator[](const string& name){
+    void set(const string& name, Food* food){
         current_size += 1;
         int index;
-
-        if((float)current_size / (float)max_size >= lf){
+        if((float)current_size / (float)max_size >= lf) {
             max_size *= 2;
-            vector<Food*> temp(max_size);
-            for(auto & i : map){
-                if(i != nullptr){
+            vector<Food *> temp(max_size);
+            for (auto &i: map) {
+                if (i != nullptr) {
                     index = hash(i->getKey()) % (max_size);
-                    if(!temp[index]){
+                    if (!temp[index]) {
                         temp[index] = i;
-                    }
-                    else if(temp[index]->getKey() != name){
+                    } else if (temp[index]->getKey() != i->getKey()) {
                         int power = 0;
-                        while(temp[index] != nullptr){
+                        while (temp[index] != nullptr) {
                             index += pow(2, power);
                             power++;
-                            if(index >= max_size){
-                                index = index % getSize();
+                            if (index >= max_size) {
+                                index = index % max_size;
                             }
                         }
                         temp[index] = i;
@@ -83,8 +85,8 @@ public:
             map = temp;
         }
         index = hash(name) % (max_size);
-        if(!map[index]){
-            return map[index];
+        if(map[index] == nullptr){
+            map[index] = food;
         }
         if(map[index]->getKey() != name){
             int power = 0;
@@ -95,12 +97,8 @@ public:
                     index = index % max_size;
                 }
             }
-            return map[index];
+            map[index] = food;
         }
-    }
-
-    Food* operator[](const string& name) const{
-        return map[hash(name) % (max_size - 1)];
     }
 
     void tenLowest(const string& category, const string& nutrition) {
