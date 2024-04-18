@@ -38,53 +38,49 @@ public:
         return current_size;
     }
     Food* get(const string& name){
-        int index = hash(name) % (max_size);
+        int index = hash(name) % (max_size - 5);
         if(map[index] != nullptr) {
             if (map[index]->getKey() == name) {
                 return map[index];
             } else if (map[index]->getKey() != name) {
-                int power = 0;
-                while (map[index] != nullptr) {
-                    index += pow(2, power);
-                    power++;
-                    if (index >= max_size) {
-                        index = index % max_size;
+                for(int j = 0; j < max_size; j++){
+                    index = hash(name) % (max_size - 5);
+                    if(map[index]->getKey() == name){
+                        return map[index];
                     }
                 }
-                return map[index];
             }
-        }
-        else{
-            return nullptr;
+        }else{
+            cout << "Food doesn't exist" << endl;
         }
     }
     void set(const string& name, Food* food){
         current_size += 1;
         int index;
         if((float)current_size / (float)max_size >= lf) {
+            // cout << "Resizing" << endl;
             max_size *= 2;
             vector<Food *> temp(max_size);
             for (auto &i: map) {
                 if (i != nullptr) {
-                    index = hash(i->getKey()) % (max_size);
-                    if (!temp[index]) {
+                    index = hash(i->getKey()) % (max_size - 5);
+                    cout << index << " : " << getSize() << endl;
+                    if (temp[index] == nullptr) {
                         temp[index] = i;
                     } else if (temp[index]->getKey() != i->getKey()) {
-                        int power = 0;
-                        while (temp[index] != nullptr) {
-                            index += pow(2, power);
-                            power++;
-                            if (index >= max_size) {
-                                index = index % max_size;
+                        for(int j = 0; j < max_size; j++){
+                            index = hash(i->getKey()) % (max_size - 5);
+                            if(temp[index]){
+                                temp[index] = i;
+                                break;
                             }
                         }
-                        temp[index] = i;
                     }
                 }
             }
             map = temp;
         }
-        index = hash(name) % (max_size);
+        index = hash(name) % (max_size - 5);
         if(map[index] == nullptr){
             map[index] = food;
         }
@@ -140,9 +136,6 @@ public:
                     float val = map[i]->getValue().second[n];
                     if(val < 0){
                         continue;
-                    }
-                    if(map[i]->getKey() == "Pork Cured Bacon Cooked Microwaved"){
-                        cout << "here";
                     }
                     if (temp.size() < 10) {
                         temp.emplace_back(map[i]->getKey(), val);
