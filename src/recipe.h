@@ -34,13 +34,13 @@ public:
     }
     void load(){
         fstream file;
-        file.open("MyFoodData Nutrition Facts SpreadSheet Release 1.4 - SR Legacy and FNDDS.csv", ios::in | ios::app);
+        file.open("MyFoodData Nutrition Facts SpreadSheet Release 1.4 - SR Legacy and FNDDS.csv");
         string temp, line, word, code, description, nutrient_code;
         getline(file, temp);
         getline(file, temp);
         getline(file, temp);
         getline(file, temp);
-        while(getline(file, line)){
+        while (getline(file, line)) {
             stringstream s(line);
             getline(s, word, ',');
             //ptr->ID = stof(word);
@@ -112,7 +112,7 @@ public:
             string sd9 = word;
             getline(s, word, ',');
             float twohundredcal_weight = stof(word);
-            vector<float> v = {calories, protein, carbohydrates, sugars, fiber, cholesterol, saturated_fats, trans_fats, soluble_fiber, insoluble_fiber, monounsaturated_fats, polyunsaturated_fats, caffeine, sw, sw2, sw3, sw4, sw5, sw6, sw7, sw8, sw9, twohundredcal_weight};
+            vector<float> v = { calories, protein, carbohydrates, sugars, fiber, cholesterol, saturated_fats, trans_fats, soluble_fiber, insoluble_fiber, monounsaturated_fats, polyunsaturated_fats, caffeine, sw, sw2, sw3, sw4, sw5, sw6, sw7, sw8, sw9, twohundredcal_weight };
             Food* ptr = new Food(name, make_pair(food_group, v));
             map->set(name, ptr);
             trie->insert(ptr);

@@ -7,4 +7,4 @@ include_directories(src)
 
 add_executable(HappyWeight
         src/hashmap.h
-        src/main.cpp src/trie.h)
+        src/main.cpp src/trie.h src/trie.h src/recipe.h)

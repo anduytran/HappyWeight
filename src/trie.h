@@ -8,7 +8,7 @@
 #include <queue>
 #include "food.h"
 using namespace std;
-#define VOCAB_SIZE 47
+#define VOCAB_SIZE 50
 
 struct PQCompare {
     bool operator()(const pair<string, float>& p1, const pair<string, float>& p2) const {
@@ -56,15 +56,18 @@ public:
         for (char i : name) {
             char c = tolower(i);
             int index = c - 'a';
-            if(index == -65 || index == -64) {
-                index += 91; // index 26 and 27
+            if (-65 <= index && index <= -63) {
+                index += 91; // index 26 - 28
             }
-            else if(-60 <= index && index <= -56){ // '%'
-                index += 88; // index 28 - 32
+            else if (-60 <= index && index <= -56) { // '%'
+                index += 89; // index 29 - 33
             }
 
-            else if(-52 <= index  && index <= -39){ // '-'
-                index += 85; // index 33 - 46
+            else if (-52 <= index && index <= -38) { // '-'
+                index += 86; // index 34 - 47
+            }
+            else if (index == -54) {
+                index = 49;
             }
             if(curr->next[index] == nullptr){
                 curr->next[index] = new TrieNode();
