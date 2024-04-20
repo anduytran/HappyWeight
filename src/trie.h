@@ -10,12 +10,6 @@
 using namespace std;
 #define VOCAB_SIZE 50
 
-struct PQCompare {
-    bool operator()(const pair<string, float>& p1, const pair<string, float>& p2) const {
-        return p1.second > p2.second;
-    }
-};
-
 struct TrieNode{
     char character;
     Food* food;
@@ -27,17 +21,24 @@ struct TrieNode{
     }
 };
 
+struct PQCompare {
+    bool operator()(const pair<string, float>& p1, const pair<string, float>& p2) const {
+        return p1.second > p2.second;
+    }
+};
+
 class Trie{
+    using PriorityQueue = priority_queue<pair<string, float>, vector<pair<string, float>>, PQCompare>;
     TrieNode* root;
     int item_count = 0;
-    using PriorityQueue = priority_queue<pair<string, float>, vector<pair<string, float>>, PQCompare>;
 
 public:
+
     Trie(){
         root = new TrieNode();
     }
     ~Trie(){
-        cleanUp(root);
+
     }
     void cleanUp(TrieNode* ptr) {
         if (ptr == nullptr) {
@@ -82,27 +83,35 @@ public:
 
     Food* search(string word){
         TrieNode *curr = root;
-        for (char i : word){
+        for (char i : word) {
             char c = tolower(i);
             int index = c - 'a';
-            if(index == -65 || index == -64) {
-                index += 91; // index 26 and 27
+            if (-65 <= index && index <= -63) {
+                index += 91; // index 26 - 28
             }
-            else if(-60 <= index && index <= -56){ // '%'
-                index += 88; // index 28 - 32
+            else if (-60 <= index && index <= -56) { // '%'
+                index += 89; // index 29 - 33
             }
-            else if(-52 <= index  && index <= -39){ // '-'
-                index += 85; // index 33 - 46
+
+            else if (-52 <= index && index <= -38) { // '-'
+                index += 86; // index 34 - 47
             }
-            if(curr->next[index] == nullptr ){
+            else if (index == -54) {
+                index = 49;
+            }
+            if(curr->next[index] == nullptr){
                 return nullptr;
             }
             curr = curr->next[index];
         }
-        if(curr->isWord)
+        if(curr->isWord) {
             return curr->food;
-        return nullptr;
+        }
+        else{
+            return nullptr;
+        }
     }
+
     void iterate(TrieNode* ptr, vector<pair<string, float>> &temp, const string& category, const string& nutrition, const string& comp){
         if(ptr == nullptr){
             return;
