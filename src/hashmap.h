@@ -37,7 +37,7 @@ public:
     int getCurrentSize() const{
         return current_size;
     }
-    void set(const string& name, Food* food){
+    void set(string name, Food* food){
         current_size += 1;
         int index;
         if((float)current_size / (float)max_size >= lf) {
@@ -79,7 +79,7 @@ public:
             }
         }
     }
-    Food* get(const string& name){
+    Food* get(string name){
         int index = hash(name) % (max_size - 5);
         if(map[index] != nullptr) {
             if (map[index]->getKey() == name) {
