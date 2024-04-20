@@ -44,9 +44,11 @@ public:
                 return map[index];
             } else if (map[index]->getKey() != name) {
                 for(int j = 0; j < max_size; j++){
-                    index = hash(name) % (max_size - 5);
-                    if(map[index]->getKey() == name){
-                        return map[index];
+                    index = (hash(name) + (j * j)) % (max_size - 5);
+                    if(map[index] != nullptr) {
+                        if (map[index]->getKey() == name) {
+                            return map[index];
+                        }
                     }
                 }
             }
@@ -58,19 +60,20 @@ public:
         current_size += 1;
         int index;
         if((float)current_size / (float)max_size >= lf) {
-            // cout << "Resizing" << endl;
             max_size *= 2;
             vector<Food *> temp(max_size);
             for (auto &i: map) {
                 if (i != nullptr) {
+                    if(i->getKey() == "Spinach Cooked From Canned Made With Oil"){
+                        cout << "here!" << endl;
+                    }
                     index = hash(i->getKey()) % (max_size - 5);
-                    cout << index << " : " << getSize() << endl;
                     if (temp[index] == nullptr) {
                         temp[index] = i;
                     } else if (temp[index]->getKey() != i->getKey()) {
                         for(int j = 0; j < max_size; j++){
-                            index = hash(i->getKey()) % (max_size - 5);
-                            if(temp[index]){
+                            index = (hash(i->getKey()) + (j * j)) % (max_size - 5);
+                            if(!temp[index]){
                                 temp[index] = i;
                                 break;
                             }
@@ -84,16 +87,14 @@ public:
         if(map[index] == nullptr){
             map[index] = food;
         }
-        if(map[index]->getKey() != name){
-            int power = 0;
-            while(map[index] != nullptr){
-                index += pow(2, power);
-                power++;
-                if(index > getSize()){
-                    index = index % max_size;
+        else if(map[index]->getKey() != name){
+            for(int j = 0; j < max_size; j++){
+                index = (hash(name) + (j * j)) % (max_size - 5);
+                if(!map[index]){
+                    map[index] = food;
+                    break;
                 }
             }
-            map[index] = food;
         }
     }
 

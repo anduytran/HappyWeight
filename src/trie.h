@@ -93,39 +93,84 @@ public:
             return curr->food;
         return nullptr;
     }
-    void iterate(TrieNode* ptr, vector<pair<string, float>> &temp, const string& category){
+    void iterate(TrieNode* ptr, vector<pair<string, float>> &temp, const string& category, const string& nutrition, const string& comp){
         if(ptr == nullptr){
             return;
         }
+        int n;
+        if(nutrition == "Calories"){
+            n = 0;
+        } else if(nutrition == "Protein"){
+            n = 1;
+        } else if(nutrition == "Carbohydrates"){
+            n = 2;
+        } else if(nutrition == "Sugars"){
+            n = 3;
+        } else if(nutrition == "Fiber"){
+            n = 4;
+        } else if(nutrition == "Cholesterol"){
+            n = 5;
+        } else if(nutrition == "Saturated Fats"){
+            n = 6;
+        } else if(nutrition == "Trans Fatty Acids"){
+            n = 7;
+        } else if(nutrition == "Soluble Fiber"){
+            n = 8;
+        } else if(nutrition == "Insoluble Fiber"){
+            n = 9;
+        } else if(nutrition == "Monounsaturated Fats"){
+            n = 10;
+        } else if(nutrition == "Polyunsaturated Fats"){
+            n = 11;
+        } else if(nutrition == "Caffeine") {
+            n = 12;
+        } else{
+            cout << "Not Valid" << endl;
+            return;
+        }
         for(int i = 0; i < VOCAB_SIZE; i++){
-            iterate(ptr->next[i], temp, category);
+            iterate(ptr->next[i], temp, category, nutrition, comp);
             if(ptr->next[i] != nullptr){
                 if(ptr->next[i]->isWord && category == ptr->next[i]->food->getValue().first){
-                    float norm_cal = ptr->next[i]->food->getValue().second[0];
-                    if(norm_cal < 0){
+                    float val = ptr->next[i]->food->getValue().second[n];
+                    if(val < 0){
                         continue;
                     }
                     if (temp.size() < 10) {
-                        temp.emplace_back(ptr->next[i]->food->getKey(), norm_cal);
+                        temp.emplace_back(ptr->next[i]->food->getKey(), val);
                         if (temp.size() == 10) {
-                            sort(temp.begin(), temp.end(), sortbysecondgt);
+                            if(comp == "Lowest"){
+                                sort(temp.begin(), temp.end(), sortbysecondlt);
+                            }
+                            else if(comp == "Highest"){
+                                sort(temp.begin(), temp.end(), sortbysecondgt);
+                            }
                         }
                     } else {
-                        if (norm_cal > temp.back().second && norm_cal > 0) {
+                        if (val > temp.back().second && val > 0 && comp == "Highest") {
                             temp.pop_back();
-                            temp.emplace_back(ptr->next[i]->food->getKey(), norm_cal);
+                            temp.emplace_back(ptr->next[i]->food->getKey(), val);
                             sort(temp.begin(), temp.end(), sortbysecondgt);
+                        }else if(val < temp.back().second && val > 0 && comp == "Lowest"){
+                            temp.pop_back();
+                            temp.emplace_back(ptr->next[i]->food->getKey(), val);
+                            sort(temp.begin(), temp.end(), sortbysecondlt);
                         }
                     }
                 }
             }
         }
     }
-    void tenHighestCalorie(const string& category) {
+    void tenHighest(const string& category, const string& nutrition, const string& comp) {
         vector<pair<string, float>> temp;
         TrieNode* ptr = root;
-        iterate(ptr, temp, category);
-        sort(temp.begin(), temp.end(), sortbysecondgt);
+        iterate(ptr, temp, category, nutrition, comp);
+        if(comp == "Lowest"){
+            sort(temp.begin(), temp.end(), sortbysecondlt);
+        }
+        else{
+            sort(temp.begin(), temp.end(), sortbysecondgt);
+        }
         cout << "The 10 foods with the highest calorie values are: " << endl;
         for (int i = 0; i < temp.size(); i++) {
             cout << i + 1 << ". " << temp[i].first << ": " << temp[i].second << endl;
