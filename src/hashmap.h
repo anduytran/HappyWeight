@@ -1,12 +1,15 @@
 //
 // Created by Dylan on 4/9/2024.
 //
+#pragma once
 #ifndef HAPPYWEIGHT_HASHMAP_H
 #define HAPPYWEIGHT_HASHMAP_H
 
 #endif //HAPPYWEIGHT_HASHMAP_H
 
 #include "food.h"
+#include "comparators.h"
+#include <queue>
 using namespace std;
 
 class HashMap{
@@ -14,6 +17,62 @@ class HashMap{
     int current_size = 0;
     int max_size;
     float lf = .56;
+
+    using PriorityQueueMin = priority_queue<pair<string, float>, vector<pair<string, float>>, MinHeapCompare>;
+    using PriorityQueueMax = priority_queue<pair<string, float>, vector<pair<string, float>>, MaxHeapCompare>;
+
+private:
+    int getNutritionIndex(const string& nutrition){
+        int n = -1;
+        if(nutrition == "Calories"){
+            n = 0;
+        } else if(nutrition == "Protein"){
+            n = 1;
+        } else if(nutrition == "Carbohydrates"){
+            n = 2;
+        } else if(nutrition == "Sugars"){
+            n = 3;
+        } else if(nutrition == "Fiber"){
+            n = 4;
+        } else if(nutrition == "Cholesterol"){
+            n = 5;
+        } else if(nutrition == "Saturated Fats"){
+            n = 6;
+        } else if(nutrition == "Trans Fatty Acids"){
+            n = 7;
+        } else if(nutrition == "Soluble Fiber"){
+            n = 8;
+        } else if(nutrition == "Insoluble Fiber"){
+            n = 9;
+        } else if(nutrition == "Monounsaturated Fats"){
+            n = 10;
+        } else if(nutrition == "Polyunsaturated Fats"){
+            n = 11;
+        } else if(nutrition == "Caffeine") {
+            n = 12;
+        }
+        return n;
+    }
+
+    template<typename T, typename C>
+    void findTop10(priority_queue<T, vector<T>, C> &PQ,
+                   const string& category, int nutrition_index){
+
+        for (int i = 0; i < getSize(); i++) {
+            if (map[i] != nullptr) {
+                if (map[i]->getValue().first == category) {
+                    float val = map[i]->getValue().second[nutrition_index];
+                    if(val < 0){
+                        continue;
+                    }
+                    PQ.push(make_pair(map[i]->getKey(), val));
+                    if( PQ.size() > 10){
+                        PQ.pop();
+                    }
+                }
+            }
+        }
+    }
 
 public:
     hash<string> hash;
@@ -96,9 +155,12 @@ public:
             }
         }else{
             cout << "Food doesn't exist" << endl;
+
         }
+        return nullptr;
     }
 
+    /*
     void tenLowest(const string& category, const string& nutrition) {
         vector<pair<string, float>> temp;
         int n;
@@ -160,6 +222,7 @@ public:
             cout << i + 1 << ". " << temp[i].first << ": " << temp[i].second << endl;
         }
     }
+
     void tenHighest(const string& category, const string& nutrition) {
         vector<pair<string, float>> temp;
         int n;
@@ -220,5 +283,39 @@ public:
         for (int i = 0; i < temp.size(); i++) {
             cout << i + 1 << ". " << temp[i].first << ": " << temp[i].second << endl;
         }
+    }*/
+
+
+    void tenHighest(const string& category, const string& nutrition, const string& comp){
+        int nutrition_index = getNutritionIndex(nutrition);
+        if(nutrition_index < 0 ){
+            cout << "Not Valid" << endl;
+            return;
+        }
+        vector<pair<string, float>> top10;
+        string label = "lowest";
+        if(comp == "Lowest"){
+            PriorityQueueMax PQ;
+            findTop10(PQ, category, nutrition_index);
+            while(!PQ.empty()){
+                top10.push_back(PQ.top());
+                PQ.pop();
+            }
+        }else{
+            label = "highest";
+            PriorityQueueMin PQ;
+            findTop10(PQ, category, nutrition_index);
+            while(!PQ.empty()){
+                top10.push_back(PQ.top());
+                PQ.pop();
+            }
+        }
+
+        cout << "The 10 foods with the "<<label<<" values are: " << endl;
+        for (int i = top10.size() - 1, j = 1; i >= 0; i--, j++) {
+            cout << j << ". " << top10[i].first << ": " << top10[i].second << endl;
+        }
     }
+
+
 };

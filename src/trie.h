@@ -7,6 +7,7 @@
 #include <iostream>
 #include <queue>
 #include "food.h"
+#include "comparators.h"
 using namespace std;
 #define VOCAB_SIZE 50
 
@@ -18,18 +19,6 @@ struct TrieNode{
     TrieNode(){
         next = vector<TrieNode*>(VOCAB_SIZE, nullptr);
         isWord = false;
-    }
-};
-
-struct MinHeapCompare {
-    bool operator()(const pair<string, float>& p1, const pair<string, float>& p2) const {
-        return p1.second > p2.second || (p1.second == p2.second && p1.first < p2.first);
-    }
-};
-
-struct MaxHeapCompare {
-    bool operator()(const pair<string, float>& p1, const pair<string, float>& p2) const {
-        return p1.second < p2.second || (p1.second == p2.second && p1.first < p2.first);
     }
 };
 
@@ -53,7 +42,6 @@ private:
     }
 
     int getNutritionIndex(const string& nutrition){
-        //vector<string> nutrition_names={"Calories", "Protein", "Carbohydrates"}
         int n = -1;
         if(nutrition == "Calories"){
             n = 0;
