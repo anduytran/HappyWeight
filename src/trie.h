@@ -37,7 +37,7 @@ public:
         root = new TrieNode();
     }
     ~Trie(){
-
+        cleanUp(root);
     }
     void cleanUp(TrieNode* ptr) {
         if (ptr == nullptr) {

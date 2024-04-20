@@ -9,8 +9,8 @@ int main() {
     Recipe recipe;
     recipe.load();
     recipe.insert("Salisbury Steak With Gravy Whipped Potatoes Vegetable Dessert Frozen Meal");
-    recipe.displayNutrition();
     recipe.insert("Spinach Cooked From Canned Made With Oil");
+    recipe.displayFood();
     recipe.displayNutrition();
 
     /*

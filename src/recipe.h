@@ -12,8 +12,8 @@
 #include <trie.h>
 
 class Recipe{
-    vector<Food*> foodsHash;
-    vector<Food*> foodsTrie;
+    vector<pair<Food*, float>> foodsHash;
+    vector<pair<Food*, float>> foodsTrie;
     float calories = 0, protein = 0, fiber = 0, insoluble_fiber = 0, carbohydrates = 0, sugars = 0, soluble_fiber = 0, cholesterol = 0, saturated_fats = 0, trans_fats = 0, monounsaturated_fats = 0, polyunsaturated_fats = 0, caffeine = 0;
     HashMap* map;
     Trie* trie;
@@ -26,10 +26,10 @@ public:
     }
     ~Recipe(){
         for(int i = 0; i < foodsHash.size(); i++){
-            Food* ptr = foodsHash[i];
+            Food* ptr = foodsHash[i].first;
             delete ptr;
-            foodsHash[i] = nullptr;
-            foodsTrie[i] = nullptr;
+            foodsHash[i].first = nullptr;
+            foodsTrie[i].first = nullptr;
         }
     }
     void load(){
@@ -118,17 +118,17 @@ public:
             trie->insert(ptr);
         }
     }
-    void insert(string name, float amount = 100){
+    void insert(const string& name, float amount = 100){
         int sizeHash = foodsHash.size();
         int sizeTrie = foodsTrie.size();
 
         auto start = chrono::high_resolution_clock::now();
-        foodsHash.emplace_back(map->get(name));
+        foodsHash.emplace_back(map->get(name), amount);
         auto stop = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
         cout << "Time using the hashmap: " << duration.count() << " microseconds" << endl;
         start = chrono::high_resolution_clock::now();
-        foodsTrie.emplace_back(trie->search(name));
+        foodsTrie.emplace_back(trie->search(name), amount);
         stop = chrono::high_resolution_clock::now();
         duration = chrono::duration_cast<chrono::microseconds>(stop - start);
         cout << "Time using the trie: " << duration.count() << " microseconds" << endl;
@@ -149,7 +149,12 @@ public:
         polyunsaturated_fats += map->get(name)->getValue().second[11] / 100 * amount;
         caffeine += map->get(name)->getValue().second[12] / 100 * amount;
     }
-    void displayNutrition(){
+    void displayFood(){
+        for(int i = 0; i < foodsHash.size(); i++){
+            cout << foodsHash[i].first->getKey() << endl << endl;
+        }
+    }
+    void displayNutrition() const{
         // cout <<
         cout << "Displaying nutritional information about the inputted recipe:" << endl;
         cout << "Total Calories: " << calories << " (g)" <<  endl;
@@ -165,5 +170,8 @@ public:
         cout << "Total Polyunsaturated Fats: " << polyunsaturated_fats << " (mg)" << endl;
         cout << "Total Monounsaturated Fats: " << monounsaturated_fats << " (mg)"<< endl;
         cout << "Total Saturated Fats: " << saturated_fats << " (g)" << endl << endl;
+    }
+    void displayTen(const string& category, const string& nutrition, const string& comp){
+
     }
 };
