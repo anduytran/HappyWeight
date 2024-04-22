@@ -18,4 +18,9 @@ struct MaxHeapCompare {
     }
 };
 
+bool caseinsensitive(char a, char b)
+{
+    return tolower(a) == tolower(b);
+}
+
 #endif

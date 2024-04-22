@@ -29,6 +29,24 @@ class Trie{
     int item_count = 0;
 
 private:
+    void searchKey(TrieNode* ptr, const string& s) {
+        if (ptr == nullptr) {
+            return;
+        }
+        for (int i = 0; i < VOCAB_SIZE; i++) {
+            searchKey(ptr->next[i], s);
+            if (ptr->next[i] != nullptr) {
+                if(ptr -> next[i] -> isWord){
+                    string str = ptr->next[i]->food->getKey();
+                    auto it = ::search(str.begin(), str.end(), s.begin(), s.end(),
+                                       caseinsensitive);
+                    if(it != str.end()){
+                        cout << ptr->next[i]->food->getKey() << endl;
+                    }
+                }
+            }
+        }
+    }
     void cleanUp(TrieNode* ptr) {
         if (ptr == nullptr) {
             return;
@@ -103,7 +121,7 @@ public:
         root = new TrieNode();
     }
     ~Trie(){
-
+        cleanUp(root);
     }
 
     void insert(Food*& food) {
@@ -198,5 +216,11 @@ public:
         }
         cout << endl;
     }
+
+    void searchForKey(const string& s){
+        searchKey(root, s);
+        cout << endl;
+    }
+
 };
 #endif //TESTING_TRIE_H

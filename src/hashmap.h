@@ -96,6 +96,19 @@ public:
     int getCurrentSize() const{
         return current_size;
     }
+    void search(const string& s){
+        for(int i = 0; i < map.size(); i++){
+            if(map[i] != nullptr){
+                string str = map[i]->getKey();
+                auto it = ::search(str.begin(), str.end(), s.begin(), s.end(),
+                                   caseinsensitive);
+                if(it != str.end()){
+                    cout << map[i]->getKey() << endl;
+                }
+            }
+        }
+        cout << endl;
+    }
     void set(string name, Food* food){
         current_size += 1;
         int index;
@@ -159,132 +172,6 @@ public:
         }
         return nullptr;
     }
-
-    /*
-    void tenLowest(const string& category, const string& nutrition) {
-        vector<pair<string, float>> temp;
-        int n;
-        if(nutrition == "Calories"){
-            n = 0;
-        } else if(nutrition == "Protein"){
-            n = 1;
-        } else if(nutrition == "Carbohydrates"){
-            n = 2;
-        } else if(nutrition == "Sugars"){
-            n = 3;
-        } else if(nutrition == "Fiber"){
-            n = 4;
-        } else if(nutrition == "Cholesterol"){
-            n = 5;
-        } else if(nutrition == "Saturated Fats"){
-            n = 6;
-        } else if(nutrition == "Trans Fatty Acids"){
-            n = 7;
-        } else if(nutrition == "Soluble Fiber"){
-            n = 8;
-        } else if(nutrition == "Insoluble Fiber"){
-            n = 9;
-        } else if(nutrition == "Monounsaturated Fats"){
-            n = 10;
-        } else if(nutrition == "Polyunsaturated Fats"){
-            n = 11;
-        } else if(nutrition == "Caffeine") {
-            n = 12;
-        } else{
-            cout << "Not Valid" << endl;
-            return;
-        }
-        for (int i = 0; i < getSize(); i++) {
-            if (map[i] != nullptr) {
-                if (map[i]->getValue().first == category) {
-                    float val = map[i]->getValue().second[n];
-                    if(val < 0){
-                        continue;
-                    }
-                    if (temp.size() < 10) {
-                        temp.emplace_back(map[i]->getKey(), val);
-                        if (temp.size() == 10) {
-                            sort(temp.begin(), temp.end(), sortbysecondlt);
-                        }
-                    } else {
-                        if (val < temp.back().second && val > 0) {
-                            temp.pop_back();
-                            temp.emplace_back(map[i]->getKey(), val);
-                            sort(temp.begin(), temp.end(), sortbysecondlt);
-                        }
-                    }
-                }
-            }
-        }
-        sort(temp.begin(), temp.end(), sortbysecondlt);
-        cout << "The 10 foods with the lowest " << nutrition << " values are: " << endl;
-        for (int i = 0; i < temp.size(); i++) {
-            cout << i + 1 << ". " << temp[i].first << ": " << temp[i].second << endl;
-        }
-    }
-
-    void tenHighest(const string& category, const string& nutrition) {
-        vector<pair<string, float>> temp;
-        int n;
-        if(nutrition == "Calories"){
-            n = 0;
-        } else if(nutrition == "Protein"){
-            n = 1;
-        } else if(nutrition == "Carbohydrates"){
-            n = 2;
-        } else if(nutrition == "Sugars"){
-            n = 3;
-        } else if(nutrition == "Fiber"){
-            n = 4;
-        } else if(nutrition == "Cholesterol"){
-            n = 5;
-        } else if(nutrition == "Saturated Fats"){
-            n = 6;
-        } else if(nutrition == "Trans Fatty Acids"){
-            n = 7;
-        } else if(nutrition == "Soluble Fiber"){
-            n = 8;
-        } else if(nutrition == "Insoluble Fiber"){
-            n = 9;
-        } else if(nutrition == "Monounsaturated Fats"){
-            n = 10;
-        } else if(nutrition == "Polyunsaturated Fats"){
-            n = 11;
-        } else if(nutrition == "Caffeine") {
-            n = 12;
-        } else{
-            cout << "Not Valid" << endl;
-            return;
-        }
-        for (int i = 0; i < getSize(); i++) {
-            if (map[i] != nullptr) {
-                if (map[i]->getValue().first == category) {
-                    float val = map[i]->getValue().second[n];
-                    if(val < 0){
-                        continue;
-                    }
-                    if (temp.size() < 10) {
-                        temp.emplace_back(map[i]->getKey(), val);
-                        if (temp.size() == 10) {
-                            sort(temp.begin(), temp.end(), sortbysecondgt);
-                        }
-                    } else {
-                        if (val > temp.back().second && val > 0) {
-                            temp.pop_back();
-                            temp.emplace_back(map[i]->getKey(), val);
-                            sort(temp.begin(), temp.end(), sortbysecondgt);
-                        }
-                    }
-                }
-            }
-        }
-        sort(temp.begin(), temp.end(), sortbysecondgt);
-        cout << "The 10 foods with the highest " << nutrition << " values are: " << endl;
-        for (int i = 0; i < temp.size(); i++) {
-            cout << i + 1 << ". " << temp[i].first << ": " << temp[i].second << endl;
-        }
-    }*/
-
 
     void tenValues(const string& category, const string& nutrition, const string& comp){
         int nutrition_index = getNutritionIndex(nutrition);

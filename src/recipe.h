@@ -216,4 +216,16 @@ public:
         cout << "Time using the trie: " << duration.count() << " milliseconds" << endl << endl;
 
     }
+    void search(const string& s){
+        auto start = chrono::high_resolution_clock::now();
+        map->search(s);
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+        cout << "Time using the hashmap: " << duration.count() << " milliseconds" << endl << endl;
+        start = chrono::high_resolution_clock::now();
+        trie->searchForKey(s);
+        stop = chrono::high_resolution_clock::now();
+        duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+        cout << "Time using the trie: " << duration.count() << " milliseconds" << endl << endl;
+    }
 };
