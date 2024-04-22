@@ -171,7 +171,7 @@ public:
                     amount = foodsHash[i].second;
                     removeNutritionUpdate(name, amount);
                     foodsHash.erase(foodsHash.begin() + i);
-                    foodsTrie.erase(foodsHash.begin() + i);
+                    foodsTrie.erase(foodsTrie.begin() + i);
                 }
                 else if(amount <= 0){
                     cout << "Please input a valid amount to remove." << endl;
@@ -179,7 +179,7 @@ public:
                 else if(foodsHash[i].second - amount == 0){
                     removeNutritionUpdate(name, amount);
                     foodsHash.erase(foodsHash.begin() + i);
-                    foodsTrie.erase(foodsHash.begin() + i);
+                    foodsTrie.erase(foodsTrie.begin() + i);
                 }
                 else{
                     foodsHash[i].second -= amount;
@@ -187,7 +187,7 @@ public:
                     removeNutritionUpdate(name, amount);
                     if(foodsHash[i].second <= 0){
                         foodsHash.erase(foodsHash.begin() + i);
-                        foodsTrie.erase(foodsHash.begin() + i);
+                        foodsTrie.erase(foodsTrie.begin() + i);
                     }
                 }
             }
