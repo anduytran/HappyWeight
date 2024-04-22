@@ -167,7 +167,7 @@ public:
         }
     }
 
-    void tenHighest(const string& category, const string& nutrition, const string& comp){
+    void tenValues(const string& category, const string& nutrition, const string& comp){
         int nutrition_index = getNutritionIndex(nutrition);
         if(nutrition_index < 0 ){
             cout << "Not Valid" << endl;
@@ -191,11 +191,12 @@ public:
                 PQ.pop();
             }
         }
-
+        cout << "Using the Trie, " << endl;
         cout << "The 10 foods with the "<<label<<" values are: " << endl;
         for (int i = top10.size() - 1, j = 1; i >= 0; i--, j++) {
             cout << j << ". " << top10[i].first << ": " << top10[i].second << endl;
         }
+        cout << endl;
     }
 };
 #endif //TESTING_TRIE_H
