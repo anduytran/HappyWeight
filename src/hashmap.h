@@ -43,35 +43,35 @@ private:
     }
 
 public:
-    hash<string> hash;
+    hash<string> hash; // using the hash function from STL
     HashMap(){
-        max_size = 400;
+        max_size = 400; // because we know how big our map is, we can start "bigger" just to reduce amount of rehashings
         vector<Food*> v(max_size);
         this->map = v;
     }
     ~HashMap(){
-        for(auto & i : map) {
-            if (i != nullptr) {
+        for(auto & i : map) { // iterate through map
+            if (i != nullptr) { // if the item in map is actually a food item and not nullptr
                 Food *ptr = i;
                 delete ptr;
-                i = nullptr;
+                i = nullptr; // delete and reassign to nullptr
             }
         }
     }
     int getSize() const{
-        return max_size;
+        return max_size; // get the max capacity
     }
     int getCurrentSize() const{
-        return current_size;
+        return current_size; // get the current size
     }
-    void search(const string& s){
+    void search(const string& s){ // look for item in map with only key-words
         int entries = 0;
         string output = "";
         for(int i = 0; i < map.size(); i++){
             if(map[i] != nullptr){
                 string str = map[i]->getKey();
                 auto it = ::search(str.begin(), str.end(), s.begin(), s.end(),
-                                   caseinsensitive);
+                                   caseinsensitive); // use custom comparator for case insensitivity
                 if(it != str.end()){
                     entries++;
                     output += map[i]->getKey() + "\n";
@@ -80,21 +80,21 @@ public:
         }
         cout << entries << " entries found for \"" << s << "\"" << endl << output << endl;
     }
-    void set(string name, Food* food){
-        current_size += 1;
+    void set(string name, Food* food){ // set value in hashmap
+        current_size += 1; // increase size
         int index;
-        if((float)current_size / (float)max_size >= lf) {
+        if((float)current_size / (float)max_size >= lf) { // if resize and rehash,
             max_size *= 2;
-            vector<Food *> temp(max_size);
-            for (auto &i: map) {
-                if (i != nullptr) {
+            vector<Food *> temp(max_size); // create a new vector that is double the previous size
+            for (auto &i: map) { // iterate
+                if (i != nullptr) { // if there is an item in the previous vector, rehash
                     index = hash(i->getKey()) % (max_size - 5);
-                    if (temp[index] == nullptr) {
+                    if (temp[index] == nullptr) { // if there is no collision
                         temp[index] = i;
-                    } else if (temp[index]->getKey() != i->getKey()) {
+                    } else if (temp[index]->getKey() != i->getKey()) { // if there is a collision
                         for(int j = 0; j < max_size; j++){
-                            index = (hash(i->getKey()) + (j * j)) % (max_size - 5);
-                            if(!temp[index]){
+                            index = (hash(i->getKey()) + (j * j)) % (max_size - 5); // quadratic probing
+                            if(!temp[index]){ // until you find a spot that's not taken
                                 temp[index] = i;
                                 break;
                             }
@@ -102,15 +102,15 @@ public:
                     }
                 }
             }
-            map = temp;
+            map = temp; // reassign the map ptr to the new vector
         }
-        index = hash(name) % (max_size - 5);
-        if(map[index] == nullptr){
+        index = hash(name) % (max_size - 5); // recalculate index after rehashing or for the first time
+        if(map[index] == nullptr){ // if no collision
             map[index] = food;
         }
-        else if(map[index]->getKey() != name){
+        else if(map[index]->getKey() != name){ // if there is a collision, and this item is not the owner of the spot
             for(int j = 0; j < max_size; j++){
-                index = (hash(name) + (j * j)) % (max_size - 5);
+                index = (hash(name) + (j * j)) % (max_size - 5); // quadratic probing
                 if(!map[index]){
                     map[index] = food;
                     break;
@@ -118,16 +118,16 @@ public:
             }
         }
     }
-    Food* get(string name){
-        int index = hash(name) % (max_size - 5);
-        if(map[index] != nullptr) {
-            if (map[index]->getKey() == name) {
+    Food* get(string name){ // retrieve item from hashmap
+        int index = hash(name) % (max_size - 5); // calculate index
+        if(map[index] != nullptr) { // if the hash calculates hits a spot that's not empty
+            if (map[index]->getKey() == name) { // if this spot is the "name's" spot,
                 return map[index];
-            } else if (map[index]->getKey() != name) {
+            } else if (map[index]->getKey() != name) { // if this spot is not the "name's" spot
                 for(int j = 0; j < max_size; j++){
-                    index = (hash(name) + (j * j)) % (max_size - 5);
+                    index = (hash(name) + (j * j)) % (max_size - 5); // quadratic probing
                     if(map[index] != nullptr) {
-                        if (map[index]->getKey() == name) {
+                        if (map[index]->getKey() == name) { // if quadratic probing finds a new item, and it is the correct item
                             return map[index];
                         }
                     }
@@ -138,21 +138,21 @@ public:
         }
     }
     void tenValues(const string& category, const string& nutrition, const string& comp){
-        int nutrition_index = getNutritionIndex(nutrition);
-        if(nutrition_index < 0 ){
+        int nutrition_index = getNutritionIndex(nutrition); // get correct index for nutrition
+        if(nutrition_index < 0 ){ // getNutritionIndex() returns -1 for incorrect strings
             cout << "Not Valid" << endl;
             return;
         }
         vector<pair<string, float>> top10;
         string label = "lowest";
-        if(comp == "Lowest"){
+        if(comp == "Lowest"){ // min heap
             PriorityQueueMax PQ;
             findTop10(PQ, category, nutrition_index);
             while(!PQ.empty()){
                 top10.push_back(PQ.top());
                 PQ.pop();
             }
-        }else{
+        }else{ // max heap
             label = "highest";
             PriorityQueueMin PQ;
             findTop10(PQ, category, nutrition_index);
@@ -162,7 +162,7 @@ public:
             }
         }
         cout << "Using the Hashmap, " << endl;
-        cout << "The 10 foods with the "<< label << " " << nutrition << " are: " << endl;
+        cout << "The 10 foods [100 (g) serving sizes] with the "<< label << " " << nutrition << " are: " << endl;
         for (int i = top10.size() - 1, j = 1; i >= 0; i--, j++) {
             cout << j << ". " << top10[i].first << ": " << top10[i].second << endl;
         }

@@ -59,7 +59,7 @@ void option(){
             if(opt == 1){
                 //search
                 string s;
-                cout << "Please enter a food item: ";
+                cout << "Please enter a food item: " << endl;
                 getline(cin, s);
                 recipe.search(s);
             }
@@ -69,7 +69,7 @@ void option(){
                 int choice = 0;
                 cout << "What would you like to add to your recipe?" << endl;
                 getline(cin, s);
-                cout << "Would you like to choose from the preset serving sizes? \n1. Yes\t2. No" << endl;
+                cout << "Would you like to choose from the preset serving sizes? Please choose an option 1-2. \n1. Yes\t2. No" << endl;
                 cin >> choice;
                 cin.ignore();
                 if(choice == 1){

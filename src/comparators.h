@@ -19,7 +19,7 @@ struct MaxHeapCompare {
 };
 
 bool caseinsensitive(char a, char b){
-    return tolower(a) == tolower(b);
+    return tolower(a) == tolower(b); // compare the lower chars of each character in the string for case insensitivity
 }
 
 int getNutritionIndex(const string& nutrition){
