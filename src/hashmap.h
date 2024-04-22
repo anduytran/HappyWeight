@@ -133,12 +133,10 @@ public:
                     }
                 }
             }
-        }else{
-            cout << "Food doesn't exist" << endl;
+        }else {
+            return nullptr;
         }
-        return nullptr;
     }
-
     void tenValues(const string& category, const string& nutrition, const string& comp){
         int nutrition_index = getNutritionIndex(nutrition);
         if(nutrition_index < 0 ){

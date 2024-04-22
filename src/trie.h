@@ -178,7 +178,7 @@ public:
                 PQ.pop();
             }
         }
-        cout << "Using the Trie, " << endl;
+        cout << "Using the Trie," << endl;
         cout << "The 10 foods with the "<< label << " " << nutrition << " are: " << endl;
         for (int i = top10.size() - 1, j = 1; i >= 0; i--, j++) {
             cout << j << ". " << top10[i].first << ": " << top10[i].second << endl;

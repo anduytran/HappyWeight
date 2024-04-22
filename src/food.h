@@ -7,6 +7,7 @@
 #endif //TESTING_FOOD_H
 #pragma once
 #include <vector>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -27,14 +28,16 @@ bool sortbysecondgt(const pair<string, float> &a, const pair<string, float> &b)
 
 
 class Food{
-    float ID, calories, protein, fiber, insoluble_fiber, carbohydrates, sugars, soluble_fiber, cholesterol, saturated_fats, trans_fats, monounsaturated_fats, polyunsaturated_fats, caffeine, sw, sw2, sw3, sw4, sw5, sw6, sw7, sw8, sw9, twohundredcal_weight;
-    string name, food_group, sd, sd2, sd3, sd4, sd5, sd6, sd7, sd8, sd9;
+    float calories, fat, protein, fiber, insoluble_fiber, carbohydrates, sugars, soluble_fiber, cholesterol, saturated_fats, trans_fats, monounsaturated_fats, polyunsaturated_fats, alcohol, caffeine;
+    string name, food_group;
     string key;
     pair<string, vector<float>> value;
+    vector<pair<string, float>> servings;
 public:
-    Food(string k = "", pair<string, vector<float>> v = {"NULL", {}}){
+    Food(string k, const pair<string, vector<float>>& v, vector<pair<string, float>> s){
         key = k;
         value = v;
+        servings = s;
     }
     string getKey(){
         return key;
@@ -42,8 +45,9 @@ public:
     pair<string, vector<float>> getValue(){
         return value;
     }
-    Food(float calories, float protein, float fiber, float insoluble_fiber, float carbohydrates, float sugars, float soluble_fiber, float cholesterol, float saturated_fats, float trans_fat, float monounsaturated_fats, float polyunsaturated_fats, float caffeine, float sw, float sw2, float sw3, float sw4, float sw5, float sw6, float sw7, float sw8, float sw9, float twohundredcal_weight){
+    Food(float calories, float fat, float protein, float fiber, float insoluble_fiber, float carbohydrates, float sugars, float soluble_fiber, float cholesterol, float saturated_fats, float trans_fat, float monounsaturated_fats, float polyunsaturated_fats, float alcohol, float caffeine){
         this->calories = calories;
+        this->fat = fat;
         this->protein = protein;
         this->fiber = fiber;
         this->insoluble_fiber = insoluble_fiber;
@@ -55,12 +59,27 @@ public:
         this->saturated_fats = saturated_fats;
         this->monounsaturated_fats = monounsaturated_fats;
         this->polyunsaturated_fats = polyunsaturated_fats;
+        this->alcohol = alcohol;
         this->caffeine = caffeine;
-        this->sw = sw;
     }
     Food* operator=(Food* ptr){
         this->key = ptr->key;
         this->value = ptr->value;
         return this;
+    }
+    void showServingSizes(){
+        if(servings[0].first == "NULL"){
+            cout << "This item does not have a preset serving size. :(" << endl;
+            return;
+        }
+        int index = 0;
+        string out = "";
+        while(servings[index].first != "NULL"){
+
+            out += servings[index].first + ": "  + to_string(servings[index].second) + "g" + "\n";
+            index++;
+        }
+        cout << "This food item has " << index << " preset serving sizes: " << endl;
+        cout << fixed << setprecision(2) << out << endl;
     }
 };
