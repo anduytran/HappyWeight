@@ -11,8 +11,9 @@ int main() {
     recipe.load();
     recipe.insert("Salisbury Steak With Gravy Whipped Potatoes Vegetable Dessert Frozen Meal");
     recipe.insert("Spinach Cooked From Canned Made With Oil");
-    recipe.displayFood();
+    recipe.displayFoodInRecipe();
     recipe.displayNutrition();
+    recipe.displayTen("Meats", "Protein", "Highest");
 
 
     /*

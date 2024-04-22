@@ -149,10 +149,42 @@ public:
         polyunsaturated_fats += map->get(name)->getValue().second[11] / 100 * amount;
         caffeine += map->get(name)->getValue().second[12] / 100 * amount;
     }
-    void displayFood(){
+    void remove(const string& name, float amount = -1){
         for(int i = 0; i < foodsHash.size(); i++){
-            cout << foodsHash[i].first->getKey() << endl << endl;
+            if(foodsHash[i].first->getKey() == name){
+                if(amount == -1) {
+                    foodsHash[i].first = nullptr;
+                    foodsHash[i].second = 0;
+                    foodsTrie[i].first = nullptr;
+                    foodsTrie[i].second = 0;
+                }
+                else if(amount <= 0){
+                    cout << "Please input a valid amount to remove." << endl;
+                }
+                else if(foodsHash[i].second - amount == 0){
+                    foodsHash[i].first = nullptr;
+                    foodsHash[i].second = 0;
+                    foodsTrie[i].first = nullptr;
+                    foodsTrie[i].second = 0;
+                }
+                else{
+                    foodsHash[i].second -= amount;
+                    foodsTrie[i].second -= amount;
+                    if(foodsHash[i].second <= 0){
+                        foodsHash[i].first = nullptr;
+                        foodsHash[i].second = 0;
+                        foodsTrie[i].first = nullptr;
+                        foodsTrie[i].second = 0;
+                    }
+                }
+            }
         }
+    }
+    void displayFoodInRecipe(){
+        for(int i = 0; i < foodsHash.size(); i++){
+            cout << foodsHash[i].first->getKey() << ": " << foodsHash[i].second << "g" << endl;
+        }
+        cout << endl;
     }
     void displayNutrition() const{
         // cout <<
@@ -172,6 +204,16 @@ public:
         cout << "Total Saturated Fats: " << saturated_fats << " (g)" << endl << endl;
     }
     void displayTen(const string& category, const string& nutrition, const string& comp){
+        auto start = chrono::high_resolution_clock::now();
+        map->tenValues(category, nutrition, comp);
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+        cout << "Time using the hashmap: " << duration.count() << " milliseconds" << endl << endl;
+        start = chrono::high_resolution_clock::now();
+        trie->tenValues(category, nutrition, comp);
+        stop = chrono::high_resolution_clock::now();
+        duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+        cout << "Time using the trie: " << duration.count() << " milliseconds" << endl << endl;
 
     }
 };
