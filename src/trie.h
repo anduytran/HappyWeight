@@ -29,19 +29,20 @@ class Trie{
     int item_count = 0;
 
 private:
-    void searchKey(TrieNode* ptr, const string& s) {
+    void searchKey(TrieNode* ptr, const string& s, int& entries, string& output) {
         if (ptr == nullptr) {
             return;
         }
         for (int i = 0; i < VOCAB_SIZE; i++) {
-            searchKey(ptr->next[i], s);
+            searchKey(ptr->next[i], s, entries, output);
             if (ptr->next[i] != nullptr) {
                 if(ptr -> next[i] -> isWord){
                     string str = ptr->next[i]->food->getKey();
                     auto it = ::search(str.begin(), str.end(), s.begin(), s.end(),
                                        caseinsensitive);
                     if(it != str.end()){
-                        cout << ptr->next[i]->food->getKey() << endl;
+                        entries++;
+                        output += ptr->next[i]->food->getKey() + "\n";
                     }
                 }
             }
@@ -57,38 +58,6 @@ private:
                 delete ptr->next[i];
             }
         }
-    }
-
-    int getNutritionIndex(const string& nutrition){
-        int n = -1;
-        if(nutrition == "Calories"){
-            n = 0;
-        } else if(nutrition == "Protein"){
-            n = 1;
-        } else if(nutrition == "Carbohydrates"){
-            n = 2;
-        } else if(nutrition == "Sugars"){
-            n = 3;
-        } else if(nutrition == "Fiber"){
-            n = 4;
-        } else if(nutrition == "Cholesterol"){
-            n = 5;
-        } else if(nutrition == "Saturated Fats"){
-            n = 6;
-        } else if(nutrition == "Trans Fatty Acids"){
-            n = 7;
-        } else if(nutrition == "Soluble Fiber"){
-            n = 8;
-        } else if(nutrition == "Insoluble Fiber"){
-            n = 9;
-        } else if(nutrition == "Monounsaturated Fats"){
-            n = 10;
-        } else if(nutrition == "Polyunsaturated Fats"){
-            n = 11;
-        } else if(nutrition == "Caffeine") {
-            n = 12;
-        }
-        return n;
     }
 
     template<typename T, typename C>
@@ -210,7 +179,7 @@ public:
             }
         }
         cout << "Using the Trie, " << endl;
-        cout << "The 10 foods with the "<<label<<" values are: " << endl;
+        cout << "The 10 foods with the "<< label << " " << nutrition << " are: " << endl;
         for (int i = top10.size() - 1, j = 1; i >= 0; i--, j++) {
             cout << j << ". " << top10[i].first << ": " << top10[i].second << endl;
         }
@@ -218,8 +187,10 @@ public:
     }
 
     void searchForKey(const string& s){
-        searchKey(root, s);
-        cout << endl;
+        int entries = 0;
+        string output = "";
+        searchKey(root, s, entries, output);
+        cout << entries << " entries found for \"" << s << "\"" << endl << output << endl;
     }
 
 };

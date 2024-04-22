@@ -22,38 +22,6 @@ class HashMap{
     using PriorityQueueMax = priority_queue<pair<string, float>, vector<pair<string, float>>, MaxHeapCompare>;
 
 private:
-    int getNutritionIndex(const string& nutrition){
-        int n = -1;
-        if(nutrition == "Calories"){
-            n = 0;
-        } else if(nutrition == "Protein"){
-            n = 1;
-        } else if(nutrition == "Carbohydrates"){
-            n = 2;
-        } else if(nutrition == "Sugars"){
-            n = 3;
-        } else if(nutrition == "Fiber"){
-            n = 4;
-        } else if(nutrition == "Cholesterol"){
-            n = 5;
-        } else if(nutrition == "Saturated Fats"){
-            n = 6;
-        } else if(nutrition == "Trans Fatty Acids"){
-            n = 7;
-        } else if(nutrition == "Soluble Fiber"){
-            n = 8;
-        } else if(nutrition == "Insoluble Fiber"){
-            n = 9;
-        } else if(nutrition == "Monounsaturated Fats"){
-            n = 10;
-        } else if(nutrition == "Polyunsaturated Fats"){
-            n = 11;
-        } else if(nutrition == "Caffeine") {
-            n = 12;
-        }
-        return n;
-    }
-
     template<typename T, typename C>
     void findTop10(priority_queue<T, vector<T>, C> &PQ,
                    const string& category, int nutrition_index){
@@ -97,31 +65,30 @@ public:
         return current_size;
     }
     void search(const string& s){
+        int entries = 0;
+        string output = "";
         for(int i = 0; i < map.size(); i++){
             if(map[i] != nullptr){
                 string str = map[i]->getKey();
                 auto it = ::search(str.begin(), str.end(), s.begin(), s.end(),
                                    caseinsensitive);
                 if(it != str.end()){
-                    cout << map[i]->getKey() << endl;
+                    entries++;
+                    output += map[i]->getKey() + "\n";
                 }
             }
         }
-        cout << endl;
+        cout << entries << " entries found for \"" << s << "\"" << endl << output << endl;
     }
     void set(string name, Food* food){
         current_size += 1;
         int index;
         if((float)current_size / (float)max_size >= lf) {
-            // cout << "Resizing!" << endl;
             max_size *= 2;
             vector<Food *> temp(max_size);
             for (auto &i: map) {
                 if (i != nullptr) {
                     index = hash(i->getKey()) % (max_size - 5);
-                    if(index >= max_size){
-                        // cout << "Problem!" << endl;
-                    }
                     if (temp[index] == nullptr) {
                         temp[index] = i;
                     } else if (temp[index]->getKey() != i->getKey()) {
@@ -168,7 +135,6 @@ public:
             }
         }else{
             cout << "Food doesn't exist" << endl;
-
         }
         return nullptr;
     }
@@ -198,7 +164,7 @@ public:
             }
         }
         cout << "Using the Hashmap, " << endl;
-        cout << "The 10 foods with the "<<label<<" values are: " << endl;
+        cout << "The 10 foods with the "<< label << " " << nutrition << " are: " << endl;
         for (int i = top10.size() - 1, j = 1; i >= 0; i--, j++) {
             cout << j << ". " << top10[i].first << ": " << top10[i].second << endl;
         }

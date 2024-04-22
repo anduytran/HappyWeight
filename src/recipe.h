@@ -118,6 +118,21 @@ public:
             trie->insert(ptr);
         }
     }
+    void removeNutritionUpdate(const string& name, float amount){
+        calories -= map->get(name)->getValue().second[0] / 100 * amount;
+        protein -= map->get(name)->getValue().second[1] / 100 * amount;
+        fiber -= map->get(name)->getValue().second[2] / 100 * amount;
+        insoluble_fiber -= map->get(name)->getValue().second[3] / 100 * amount;
+        carbohydrates -= map->get(name)->getValue().second[4] / 100 * amount;
+        sugars -= map->get(name)->getValue().second[5] / 100 * amount;
+        soluble_fiber -= map->get(name)->getValue().second[6] / 100 * amount;
+        cholesterol -= map->get(name)->getValue().second[7] / 100 * amount;
+        saturated_fats -= map->get(name)->getValue().second[8] / 100 * amount;
+        trans_fats -= map->get(name)->getValue().second[9] / 100 * amount;
+        monounsaturated_fats -= map->get(name)->getValue().second[10] / 100 * amount;
+        polyunsaturated_fats -= map->get(name)->getValue().second[11] / 100 * amount;
+        caffeine -= map->get(name)->getValue().second[12] / 100 * amount;
+    }
     void insert(const string& name, float amount = 100){
         int sizeHash = foodsHash.size();
         int sizeTrie = foodsTrie.size();
@@ -153,28 +168,26 @@ public:
         for(int i = 0; i < foodsHash.size(); i++){
             if(foodsHash[i].first->getKey() == name){
                 if(amount == -1) {
-                    foodsHash[i].first = nullptr;
-                    foodsHash[i].second = 0;
-                    foodsTrie[i].first = nullptr;
-                    foodsTrie[i].second = 0;
+                    amount = foodsHash[i].second;
+                    removeNutritionUpdate(name, amount);
+                    foodsHash.erase(foodsHash.begin() + i);
+                    foodsTrie.erase(foodsHash.begin() + i);
                 }
                 else if(amount <= 0){
                     cout << "Please input a valid amount to remove." << endl;
                 }
                 else if(foodsHash[i].second - amount == 0){
-                    foodsHash[i].first = nullptr;
-                    foodsHash[i].second = 0;
-                    foodsTrie[i].first = nullptr;
-                    foodsTrie[i].second = 0;
+                    removeNutritionUpdate(name, amount);
+                    foodsHash.erase(foodsHash.begin() + i);
+                    foodsTrie.erase(foodsHash.begin() + i);
                 }
                 else{
                     foodsHash[i].second -= amount;
                     foodsTrie[i].second -= amount;
+                    removeNutritionUpdate(name, amount);
                     if(foodsHash[i].second <= 0){
-                        foodsHash[i].first = nullptr;
-                        foodsHash[i].second = 0;
-                        foodsTrie[i].first = nullptr;
-                        foodsTrie[i].second = 0;
+                        foodsHash.erase(foodsHash.begin() + i);
+                        foodsTrie.erase(foodsHash.begin() + i);
                     }
                 }
             }
@@ -208,12 +221,12 @@ public:
         map->tenValues(category, nutrition, comp);
         auto stop = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
-        cout << "Time using the hashmap: " << duration.count() << " milliseconds" << endl << endl;
+        cout << "* Time using the hashmap: " << duration.count() << " milliseconds" << endl << endl;
         start = chrono::high_resolution_clock::now();
         trie->tenValues(category, nutrition, comp);
         stop = chrono::high_resolution_clock::now();
         duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
-        cout << "Time using the trie: " << duration.count() << " milliseconds" << endl << endl;
+        cout << "* Time using the trie: " << duration.count() << " milliseconds" << endl << endl;
 
     }
     void search(const string& s){
@@ -221,11 +234,11 @@ public:
         map->search(s);
         auto stop = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
-        cout << "Time using the hashmap: " << duration.count() << " milliseconds" << endl << endl;
+        cout << "* Time using the hashmap: " << duration.count() << " milliseconds" << endl << endl;
         start = chrono::high_resolution_clock::now();
         trie->searchForKey(s);
         stop = chrono::high_resolution_clock::now();
         duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
-        cout << "Time using the trie: " << duration.count() << " milliseconds" << endl << endl;
+        cout << "* Time using the trie: " << duration.count() << " milliseconds" << endl << endl;
     }
 };
