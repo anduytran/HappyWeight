@@ -13,23 +13,23 @@
 #include <iomanip>
 
 class Recipe{
-    vector<pair<Food*, float>> foodsHash;
+    vector<pair<Food*, float>> foodsHash; // hold two vectors to keep track of foods
     vector<pair<Food*, float>> foodsTrie;
     float calories = 0, fat = 0, protein = 0, fiber = 0, insoluble_fiber = 0, carbohydrates = 0, sugars = 0, soluble_fiber = 0, cholesterol = 0, saturated_fats = 0, trans_fats = 0, monounsaturated_fats = 0, polyunsaturated_fats = 0, alcohol = 0, caffeine = 0;
-    HashMap* map;
+    HashMap* map; // recipe holds both of our data structures
     Trie* trie;
 public:
     Recipe(){
-        HashMap* map = new HashMap();
+        HashMap* map = new HashMap(); // create data structures dynamically
         Trie* trie = new Trie();
         this->map = map;
         this->trie = trie;
     }
     ~Recipe(){
+        delete map;
+        delete trie;
         for(int i = 0; i < foodsHash.size(); i++){
-            Food* ptr = foodsHash[i].first;
-            delete ptr;
-            foodsHash[i].first = nullptr;
+            foodsHash[i].first = nullptr; // when destructing, we don't want our pointers to point to random spaces
             foodsTrie[i].first = nullptr;
         }
     }
@@ -243,7 +243,6 @@ public:
         cout << endl;
     }
     void displayNutrition() const{
-        // cout <<
         cout << "Displaying nutritional information about the inputted recipe:" << endl;
         cout << "Total Calories: " << calories << " Cal" <<  endl;
         cout << "Total Protein: " << protein << " (g)"<< endl;
@@ -268,12 +267,12 @@ public:
         map->tenValues(category, nutrition, comp);
         auto stop = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
-        cout << "* Time using the hashmap: " << duration.count() << " milliseconds" << endl << endl;
         start = chrono::high_resolution_clock::now();
         trie->tenValues(category, nutrition, comp);
         stop = chrono::high_resolution_clock::now();
-        duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
-        cout << "* Time using the trie: " << duration.count() << " milliseconds" << endl << endl;
+        auto duration2 = chrono::duration_cast<chrono::milliseconds>(stop - start);
+        cout << "* Time using the hashmap: " << duration.count() << " milliseconds" << endl;
+        cout << "* Time using the trie: " << duration2.count() << " milliseconds" << endl << endl;
 
     }
     void search(const string& s){

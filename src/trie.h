@@ -68,7 +68,7 @@ private:
         }
         for(int i = 0; i < VOCAB_SIZE; i++){
             if( root -> next[i] != nullptr){
-                if(root -> next[i] -> isWord && category == root -> next[i] -> food -> getValue().first){
+                if(root -> next[i] -> isWord && (category == root -> next[i] -> food -> getValue().first || category == "All")){
 
                     float val = root -> next[i] -> food -> getValue().second[nutrition_index];
                     if(val < 0){

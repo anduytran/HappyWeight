@@ -28,7 +28,7 @@ private:
 
         for (int i = 0; i < getSize(); i++) {
             if (map[i] != nullptr) {
-                if (map[i]->getValue().first == category) {
+                if (map[i]->getValue().first == category || category == "All") {
                     float val = map[i]->getValue().second[nutrition_index];
                     if(val < 0){
                         continue;

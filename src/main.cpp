@@ -1,6 +1,6 @@
 #include "recipe.h"
 //
-// Created by Dylan on 4/9/2024.
+// Created by Dylan on 4/9/2024. Anya contributed on this file.
 //
 
 using namespace std;
@@ -20,13 +20,13 @@ void option(){
     if(input == 1){
         string n = "Highest";
         string category;
-        cout << setw(25) << "\n1. American Indian\t2. Baby Foods\t3. Baked Foods\n"<< setw(25) <<"4. Beans and Lentils\t5. Beverages\t6. Breakfast Cereal"<< setw(25) <<"\n7. Dairy and Egg Products\t8. Fast Foods\t9. Fats and Oils"<< setw(25) <<"\n10. Fish\t11. Fruits\t12. Grains and Pasta"<< setw(25) <<"\n13. Meats\t14. Nuts and Seeds\t15. Prepared Meals"<< setw(25) <<"\n16. Restaurant Foods\t17. Sandwich\t18. Snacks"<< setw(25) <<"\n19. Soups and Sauces\t20. Spices and Herbs\t21. Sweets"<< setw(25) <<"\n22. Vegetables\t23. Yogurt" << endl;
-        cout << "Which category would you like to display? " << endl;
+        cout << "Which category of food would you like to display? (Please type in the exact string)" << endl;
+        cout << setw(25) << "1. American Indian\t\t2. Baby Foods\t\t3. Baked Foods\n"<< setw(25) <<"4. Beans and Lentils\t\t5. Beverages\t\t6. Breakfast Cereal"<< setw(25) <<"\n7. Dairy and Egg Products\t8. Fast Foods\t\t9. Fats and Oils"<< setw(25) <<"\n10. Fish\t\t\t11. Fruits\t\t12. Grains and Pasta"<< setw(25) <<"\n13. Meats\t\t\t14. Nuts and Seeds\t15. Prepared Meals"<< setw(25) <<"\n16. Restaurant Foods\t\t17. Snacks\t\t"<< setw(25) <<"18. Soups and Sauces\n19. Spices and Herbs\t\t20. Sweets\t\t"<< "21. Vegetables" << endl <<"22. All" << endl;
         getline(cin, category);
         string nutrition;
 
-        cout << "Which nutrition type would you like the 10 highest values for? " << endl;
-        cout << setw(25)<< "1. Calories\t2. Protein\t3. Carbohydrates\n4. Sugars\t5. Fiber\t6. Cholesterol\n7. Saturated Fats\t8. Trans Fatty acids\t9. Soluble Fiber\n10. Insoluble Fiber\t11. Fatty Acids Total (monounsaturated)\t 12. Fatty Acids Total (polyunsaturated)\n 13. Caffeine" << endl;
+        cout << "Which nutrition type would you like the 10 highest values for? (Please type in the exact string)" << endl;
+        cout << setw(25)<< "1. Calories\t\t2. Protein\t\t\t\t3. Carbohydrates\n4. Sugars\t\t5. Fiber\t\t\t\t6. Cholesterol\n7. Saturated Fats\t8. Trans Fatty acids\t\t\t9. Soluble Fiber\n10. Insoluble Fiber\t11. Fatty Acids Total (monounsaturated)\t12. Fatty Acids Total (polyunsaturated)\n13. Caffeine" << endl;
         getline(cin, nutrition);
 
         recipe.displayTen(category, nutrition, n);
@@ -34,14 +34,14 @@ void option(){
     if(input == 2){
         string n = "Lowest";
         string category;
-        cout << setw(25) << "\n1. American Indian\t2. Baby Foods\t3. Baked Foods\n"<< setw(25) <<"4. Beans and Lentils\t5. Beverages\t6. Breakfast Cereal"<< setw(25) <<"\n7. Dairy and Egg Products\t8. Fast Foods\t9. Fats and Oils"<< setw(25) <<"\n10. Fish\t11. Fruits\t12. Grains and Pasta"<< setw(25) <<"\n13. Meats\t14. Nuts and Seeds\t15. Prepared Meals"<< setw(25) <<"\n16. Restaurant Foods\t17. Sandwich\t18. Snacks"<< setw(25) <<"\n19. Soups and Sauces\t20. Spices and Herbs\t21. Sweets"<< setw(25) <<"\n22. Vegetables\t23. Yogurt" << endl;
-        cout << "Which category would you like to display? " << endl;
+        cout << "Which category of food would you like to display? (Please type in the exact string)" << endl;
+        cout << setw(25) << "1. American Indian\t\t2. Baby Foods\t\t3. Baked Foods\n"<< setw(25) <<"4. Beans and Lentils\t\t5. Beverages\t\t6. Breakfast Cereal"<< setw(25) <<"\n7. Dairy and Egg Products\t8. Fast Foods\t\t9. Fats and Oils"<< setw(25) <<"\n10. Fish\t\t\t11. Fruits\t\t12. Grains and Pasta"<< setw(25) <<"\n13. Meats\t\t\t14. Nuts and Seeds\t15. Prepared Meals"<< setw(25) <<"\n16. Restaurant Foods\t\t17. Snacks\t\t"<< setw(25) <<"18. Soups and Sauces\n19. Spices and Herbs\t\t20. Sweets\t\t"<< "21. Vegetables" << endl <<"22. All" << endl;
         getline(cin, category);
 
         string nutrition;
 
-        cout << "\nWhich nutrition type would you like the 10 lowest values for? " << endl;
-        cout << setw(25)<< "1. Calories\t2. Protein\t3. Carbohydrates\n4. Sugars\t5. Fiber\t6. Cholesterol\n7. Saturated Fats\t8. Trans Fatty acids\t9. Soluble Fiber\n10. Insoluble Fiber\t11. Fatty Acids Total (monounsaturated)\t 12. Fatty Acids Total (polyunsaturated)\n 13. Caffeine" << endl;
+        cout << "\nWhich nutrition type would you like the 10 lowest values for? (Please type in the exact string)" << endl;
+        cout << setw(25)<< "1. Calories\t\t2. Protein\t\t\t\t3. Carbohydrates\n4. Sugars\t\t5. Fiber\t\t\t\t6. Cholesterol\n7. Saturated Fats\t8. Trans Fatty acids\t\t\t9. Soluble Fiber\n10. Insoluble Fiber\t11. Fatty Acids Total (monounsaturated)\t12. Fatty Acids Total (polyunsaturated)\n13. Caffeine" << endl;
         getline(cin, nutrition);
 
         recipe.displayTen(category, nutrition, n);
