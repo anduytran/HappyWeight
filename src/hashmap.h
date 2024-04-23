@@ -18,22 +18,28 @@ class HashMap{
     int max_size;
     float lf = .56;
 
+    //  Create an alias for a MinHeap and MaxHeap (PQ)
     using PriorityQueueMin = priority_queue<pair<string, float>, vector<pair<string, float>>, MinHeapCompare>;
     using PriorityQueueMax = priority_queue<pair<string, float>, vector<pair<string, float>>, MaxHeapCompare>;
 
 private:
     template<typename T, typename C>
+    // Generic Function to get the ten lowest or ten highest values using a MaxHeap or MinHeap
     void findTop10(priority_queue<T, vector<T>, C> &PQ,
                    const string& category, int nutrition_index){
-
+        // Iterate over hashmap
         for (int i = 0; i < getSize(); i++) {
             if (map[i] != nullptr) {
+                // If a valid category was found
                 if (map[i]->getValue().first == category || category == "All") {
+                    // Get the value, given the nutrition index
                     float val = map[i]->getValue().second[nutrition_index];
                     if(val < 0){
                         continue;
                     }
+                    // Store the name and value of the current food in the PQ
                     PQ.push(make_pair(map[i]->getKey(), val));
+                    // If the size is larger than ten, we pop that element from the PQ
                     if( PQ.size() > 10){
                         PQ.pop();
                     }
@@ -137,30 +143,40 @@ public:
             return nullptr;
         }
     }
+    // Function to print the top ten food with the highest or lowest nutritional values
     void tenValues(const string& category, const string& nutrition, const string& comp){
         int nutrition_index = getNutritionIndex(nutrition);
+        // Checking if nutrition index is valid
         if(nutrition_index < 0 ){
             cout << "Not Valid" << endl;
             return;
         }
+        // Decide whether to display the lowest or highest values
         vector<pair<string, float>> top10;
         string label = "lowest";
         if(comp == "Lowest"){
+            // Create a MaxHeap
             PriorityQueueMax PQ;
+            // Find top ten food names and values
             findTop10(PQ, category, nutrition_index);
+            // Pop the elements from the MaxHeap and store them in the top ten vector
             while(!PQ.empty()){
                 top10.push_back(PQ.top());
                 PQ.pop();
             }
         }else{
             label = "highest";
+            // Create a MinHeap
             PriorityQueueMin PQ;
+            // Find top ten food names and values
             findTop10(PQ, category, nutrition_index);
+            // Pop the elements from the MinHeap and store them in the top ten vector
             while(!PQ.empty()){
                 top10.push_back(PQ.top());
                 PQ.pop();
             }
         }
+        // Print out the results
         cout << "Using the Hashmap, " << endl;
         cout << "The 10 foods with the "<< label << " " << nutrition << " are: " << endl;
         for (int i = top10.size() - 1, j = 1; i >= 0; i--, j++) {

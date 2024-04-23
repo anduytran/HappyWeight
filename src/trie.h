@@ -11,6 +11,7 @@
 using namespace std;
 #define VOCAB_SIZE 50
 
+// Structure of trie node
 struct TrieNode{
     char character;
     Food* food;
@@ -22,6 +23,7 @@ struct TrieNode{
     }
 };
 
+//  Create an alias for a MinHeap and MaxHeap (PQ)
 class Trie{
     using PriorityQueueMin = priority_queue<pair<string, float>, vector<pair<string, float>>, MinHeapCompare>;
     using PriorityQueueMax = priority_queue<pair<string, float>, vector<pair<string, float>>, MaxHeapCompare>;
@@ -61,24 +63,30 @@ private:
     }
 
     template<typename T, typename C>
+    // Generic function to store the top 10 lowest or highest foods
     void findTop10(TrieNode* root, priority_queue<T, vector<T>, C> &PQ,
                    const string& category, int nutrition_index){
         if(root == nullptr){
             return;
         }
+        // Iterate over the vocabulary size of the current node (node children)
         for(int i = 0; i < VOCAB_SIZE; i++){
             if( root -> next[i] != nullptr){
+                // If the current node has a child, check if it is a word and a valid category
                 if(root -> next[i] -> isWord && (category == root -> next[i] -> food -> getValue().first || category == "All")){
-
+                    // Get the value of the current food given the nutrition index
                     float val = root -> next[i] -> food -> getValue().second[nutrition_index];
                     if(val < 0){
                         continue;
                     }
-                    PQ.push(make_pair(root->next[i]->food->getKey(), val));
+                    // If the value is not negative, add it to the priority queue
+                    PQ.push(make_pair(root->next[i]->food->getKey(), val)); //O(log K)
+                    // If the size of the priority queue is larger than 10, remove the top element
                     if( PQ.size() > 10){
                         PQ.pop();
                     }
                 }
+                // Recursively call the function on the child node
                 findTop10(root -> next[i], PQ, category, nutrition_index);
             }
         }
@@ -154,30 +162,40 @@ public:
         }
     }
 
+    // Function to print the top ten food with the highest or lowest nutritional values
     void tenValues(const string& category, const string& nutrition, const string& comp){
         int nutrition_index = getNutritionIndex(nutrition);
+        // Checking if nutrition index is valid
         if(nutrition_index < 0 ){
             cout << "Not Valid" << endl;
             return;
         }
+        // Decide whether to display the lowest or highest values
         vector<pair<string, float>> top10;
         string label = "lowest";
         if(comp == "Lowest"){
+            // Create a MaxHeap
             PriorityQueueMax PQ;
+            // Find top ten food names and values
             findTop10(root, PQ, category, nutrition_index);
+            // Pop the elements from the MaxHeap and store them in the top ten vector
             while(!PQ.empty()){
                 top10.push_back(PQ.top());
                 PQ.pop();
             }
         }else{
             label = "highest";
+            // Create a MinHeap
             PriorityQueueMin PQ;
+            // Find top ten food names and values
             findTop10(root, PQ, category, nutrition_index);
+            // Pop the elements from the MinHeap and store them in the top ten vector
             while(!PQ.empty()){
                 top10.push_back(PQ.top());
                 PQ.pop();
             }
         }
+        // Print out the results
         cout << "Using the Trie," << endl;
         cout << "The 10 foods with the "<< label << " " << nutrition << " are: " << endl;
         for (int i = top10.size() - 1, j = 1; i >= 0; i--, j++) {

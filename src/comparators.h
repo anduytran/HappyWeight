@@ -6,22 +6,26 @@
 using std::string;
 using std::pair;
 
+// Comparator used to store the top ten values in a MinHeap
 struct MinHeapCompare {
     bool operator()(const pair<string, float>& p1, const pair<string, float>& p2) const {
         return p1.second > p2.second || (p1.second == p2.second && p1.first < p2.first);
     }
 };
 
+// Comparator used to store the ten lowest  values in a MaxHeap
 struct MaxHeapCompare {
     bool operator()(const pair<string, float>& p1, const pair<string, float>& p2) const {
         return p1.second < p2.second || (p1.second == p2.second && p1.first < p2.first);
     }
 };
 
+// Verify that both characters are case insensitive
 bool caseinsensitive(char a, char b){
     return tolower(a) == tolower(b);
 }
 
+// Get the Nutrition index given its name
 int getNutritionIndex(const string& nutrition){
     int n = -1;
     if(nutrition == "Calories" || nutrition == "calories"){
